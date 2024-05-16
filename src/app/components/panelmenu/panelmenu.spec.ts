@@ -1,6 +1,6 @@
-import { TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
+import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { PanelMenu, PanelMenuSub } from './panelmenu';
+import { PanelMenu } from './panelmenu';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { PanelModule } from '../panel/panel';
@@ -118,7 +118,7 @@ describe('PanelMenu', () => {
         ];
         fixture.detectChanges();
 
-        const panelHeaderLinkEl = fixture.debugElement.query(By.css('.p-panelmenu-header-link'));
+        const panelHeaderLinkEl = fixture.debugElement.query(By.css('.p-panelmenu-header-action'));
         expect(panelHeaderLinkEl.nativeElement.href).toContain('primeng');
         expect(panelHeaderLinkEl.nativeElement.title).toEqual('primeng');
         expect(panelHeaderLinkEl.nativeElement.target).toEqual('primeng');
@@ -212,7 +212,6 @@ describe('PanelMenu', () => {
 
         const panelHeaderLinkEl = fixture.debugElement.query(By.css('.p-menuitem-link'));
         expect(panelHeaderLinkEl.nativeElement.href).toContain('primeng');
-        expect(panelHeaderLinkEl.nativeElement.title).toEqual('primeng');
         expect(panelHeaderLinkEl.nativeElement.target).toEqual('primeng');
         expect(panelHeaderLinkEl.query(By.css('.p-menuitem-icon')).nativeElement.className).toContain('Primeng ROCKS!');
     });
@@ -241,8 +240,7 @@ describe('PanelMenu', () => {
         headerLinks[0].nativeElement.click();
         fixture.detectChanges();
 
-        const iconEl = fixture.debugElement.query(By.css('.p-panelmenu-icon'));
-        const firstSubMenuComponent = fixture.debugElement.query(By.css('.p-panelmenu-root-submenu')).componentInstance as PanelMenuSub;
+        const iconEl = fixture.debugElement.query(By.css('.p-submenu-icon'));
         expect(handleClickSpy).toHaveBeenCalled();
         expect(panelmenu.animating).toEqual(true);
         expect(panelmenu.model[0].expanded).toEqual(true);
@@ -265,16 +263,15 @@ describe('PanelMenu', () => {
                 ]
             }
         ];
+        panelmenu.multiple = true;
         fixture.detectChanges();
 
-        const headerLinks = fixture.debugElement.queryAll(By.css('.p-panelmenu-header-link'));
+        const headerLinks = fixture.debugElement.queryAll(By.css('.p-panelmenu-header-action'));
         headerLinks[0].nativeElement.click();
         headerLinks[1].nativeElement.click();
         fixture.detectChanges();
 
-        const subMenuEls = fixture.debugElement.queryAll(By.css('.p-panelmenu-root-submenu'));
-        const firstSubMenuComponent = subMenuEls[0].componentInstance as PanelMenuSub;
-        const seconSubMenuComponent = subMenuEls[1].componentInstance as PanelMenuSub;
+        const subMenuEls = fixture.debugElement.queryAll(By.css('.p-submenu-list'));
         const activeEls = fixture.debugElement.queryAll(By.css('.p-highlight'));
         expect(activeEls.length).toEqual(2);
         let x = 0;
@@ -285,8 +282,6 @@ describe('PanelMenu', () => {
         expect(panelmenu.model[0].expanded).toEqual(true);
         expect(panelmenu.model[1].expanded).toEqual(true);
         expect(subMenuEls.length).toEqual(2);
-        // expect(firstSubMenuComponent.expanded).toEqual(true);
-        // expect(seconSubMenuComponent.expanded).toEqual(true);
     });
 
     it('should not select multiple', () => {
@@ -308,7 +303,7 @@ describe('PanelMenu', () => {
         panelmenu.multiple = false;
         fixture.detectChanges();
 
-        const headerLinks = fixture.debugElement.queryAll(By.css('.p-panelmenu-header-link'));
+        const headerLinks = fixture.debugElement.queryAll(By.css('.p-panelmenu-header-action'));
         headerLinks[0].nativeElement.click();
         headerLinks[1].nativeElement.click();
         fixture.detectChanges();
